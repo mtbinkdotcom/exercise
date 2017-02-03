@@ -1,10 +1,10 @@
 <h1>Goodstein sequence calculator</h1>
 <br/><br/>
-number = <input type='text' id='n' value='15'/><br/>
-terms = <input type='text' id='t' value='9'/> (minimum 2)<br/>
+number = <input type='text' id='n' value='13'/><br/>
+terms = <input type='text' id='t' value='4'/> (minimum 2)<br/>
 <input type='button' id='ok' value='OK'/>
 <br/><br/>
-<div id='outputdiv1'></div>
+<div style='font-family: sans-serif;font-weight: bold; font-size: 4em; color: #D73811; background-color: #EFE2FB' id='outputdiv1'></div>
 <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -72,6 +72,9 @@ function goodstein_sequence(n_number, t_terms) {
 
     var eval_expression = function (t, base) {
         t = t.replace(/\<\/sup\>/g, ')');
+        t = t.replace(/\<\/span\>/g, '');
+        t = t.replace(/\<span style\="color\: #0A46F6"\>/g, '');
+        t = t.replace(/\<span style\="color\: #D73811"\>/g, '');
         var re = new RegExp(base + '\\<sup\\>', 'g');
         t = t.replace(re, 'Math.pow(' + base + ', ');
         return eval(t);
@@ -79,17 +82,17 @@ function goodstein_sequence(n_number, t_terms) {
 
     var write_increase_expression = function (t, base) {
         var re = new RegExp(base, 'g');
-        t = t.replace(re, base + 1);
-        return t + ' - 1';
+        t = t.replace(re, '<span style="color: #0A46F6">' + (base + 1) + '</span>');
+        return t + '<span style="color: #0A46F6"> - 1</span>';
     }
 
-    var t = 'Goodstein sequence for ' + n + ':<br/><br/>';
+    var t = '';
 
     var base = 2;
     var count = 2;
     while (n < 9007199254740991) {
-        t += write_expression(n, base) + ' = ' + eval_expression(write_expression(n, base), base) + '<br/>';
-        t += write_increase_expression(write_expression(n, base), base) + ' = ' + eval_expression(write_increase_expression(write_expression(n, base), base), base + 1) + '<br/>';
+        t += write_expression(n, base) + ' = <span style="color: #0A46F6">' + eval_expression(write_expression(n, base), base) + '</span><br/>';
+        t += write_increase_expression(write_expression(n, base), base) + ' = <span style="color: #0A46F6">' + eval_expression(write_increase_expression(write_expression(n, base), base), base + 1) + '</span><br/>';
 
         n = eval_expression(write_increase_expression(write_expression(n, base), base), base + 1);
         t += '<hr/>';
