@@ -1,0 +1,116 @@
+<h1>Goodstein sequence calculator</h1>
+<br/><br/>
+number = <input type='text' id='n' value='15'/><br/>
+terms = <input type='text' id='t' value='9'/> (minimum 2)<br/>
+<input type='button' id='ok' value='OK'/>
+<br/><br/>
+<div id='outputdiv1'></div>
+<script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+<script>$(document).ready(function(){
+
+function goodstein_sequence(n_number, t_terms) {
+    var n = parseFloat(n_number);
+    var terms = parseFloat(t_terms);
+
+    var write_expression = function (n, base) {
+        var d = n;
+        var arr_d = [];
+        while (d != 1) {
+            var r = d % base;
+            arr_d.push(r);
+            d = Math.floor(d / base);
+        }
+        arr_d.reverse();
+        arr_d = [1].concat(arr_d);
+        var arr_unfinished = [];
+        var arr_t = [];
+        for (var i = 0, ii = arr_d.length; i < ii; i++) {
+            var ti = arr_d[i];
+            var c = ti;
+
+            if (c != 0) {
+                var p = (ii - (i + 1));
+                if (p == 0) {
+                    if (c == 1) {
+                        arr_t.push(1);
+                    } else {
+                        arr_t.push(c + '*' + 1);
+                    }
+                } else if (p == 1) {
+                    if (c == 1) {
+                        arr_t.push(base);
+                    } else {
+                        arr_t.push(c + '*' + base);
+                    }
+                } else if (p <= base) {
+                    if (c == 1) {
+                        arr_t.push(base + '<sup>' + p + '</sup>');
+                    } else {
+                        arr_t.push(c + '*' + base + '<sup>' + p + '</sup>');
+                    }
+                } else {
+                    arr_unfinished.push(p);
+                    if (c == 1) {
+                        arr_t.push(base + '<sup>[[' + p + ']]</sup>');
+                    } else {
+                        arr_t.push(c + '*' + base + '<sup>[[' + p + ']]</sup>');
+                    }
+                }
+            }
+        }
+        var t = arr_t.join(' + ');
+        for (var i = 0, ii = arr_unfinished.length; i < ii; i++) {
+            var ti = arr_unfinished[i];
+            var re = new RegExp('\\[\\[' + ti + '\\]\\]', 'g');
+            t = t.replace(re, write_expression(ti, base));
+        }
+        return t;
+    }
+
+    var eval_expression = function (t, base) {
+        t = t.replace(/\<\/sup\>/g, ')');
+        var re = new RegExp(base + '\\<sup\\>', 'g');
+        t = t.replace(re, 'Math.pow(' + base + ', ');
+        return eval(t);
+    }
+
+    var write_increase_expression = function (t, base) {
+        var re = new RegExp(base, 'g');
+        t = t.replace(re, base + 1);
+        return t + ' - 1';
+    }
+
+    var t = 'Goodstein sequence for ' + n + ':<br/><br/>';
+
+    var base = 2;
+    var count = 2;
+    while (n < 9007199254740991) {
+        t += write_expression(n, base) + ' = ' + eval_expression(write_expression(n, base), base) + '<br/>';
+        t += write_increase_expression(write_expression(n, base), base) + ' = ' + eval_expression(write_increase_expression(write_expression(n, base), base), base + 1) + '<br/>';
+
+        n = eval_expression(write_increase_expression(write_expression(n, base), base), base + 1);
+        t += '<hr/>';
+        base++;
+        count++;
+        if (count > t_terms) {
+            break;
+        }
+    }
+
+    return t;
+}
+
+$('#ok').on('click', function () {
+    calculate();
+});
+
+function calculate() {
+    if ($('#outputdiv1').length) {
+        $('#outputdiv1').html(goodstein_sequence($('#n').val(), $('#t').val()));
+    }
+}
+
+});</script>
