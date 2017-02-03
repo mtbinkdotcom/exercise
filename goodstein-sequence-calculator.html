@@ -39,26 +39,26 @@ function goodstein_sequence(n_number, t_terms) {
                     if (c == 1) {
                         arr_t.push(1);
                     } else {
-                        arr_t.push(c + '*' + 1);
+                        arr_t.push(c + '<span style="display:none">*</span>(' + 1 + ')');
                     }
                 } else if (p == 1) {
                     if (c == 1) {
                         arr_t.push(base);
                     } else {
-                        arr_t.push(c + '*' + base);
+                        arr_t.push(c + '<span style="display:none">*</span>(' + base + ')');
                     }
                 } else if (p <= base) {
                     if (c == 1) {
                         arr_t.push(base + '<sup>' + p + '</sup>');
                     } else {
-                        arr_t.push(c + '*' + base + '<sup>' + p + '</sup>');
+                        arr_t.push(c + '<span style="display:none">*</span>(' + base + '<sup>' + p + '</sup>)');
                     }
                 } else {
                     arr_unfinished.push(p);
                     if (c == 1) {
                         arr_t.push(base + '<sup>[[' + p + ']]</sup>');
                     } else {
-                        arr_t.push(c + '*' + base + '<sup>[[' + p + ']]</sup>');
+                        arr_t.push(c + '<span style="display:none">*</span>(' + base + '<sup>[[' + p + ']]</sup>)');
                     }
                 }
             }
@@ -76,6 +76,7 @@ function goodstein_sequence(n_number, t_terms) {
         t = t.replace(/\<\/sup\>/g, ')');
         t = t.replace(/\<\/span\>/g, '');
         t = t.replace(/&minus;/g, '-');
+        t = t.replace(/\<span style\="display\:none"\>/g, '');
         t = t.replace(/\<span style\="color\: #0A46F6"\>/g, '');
         t = t.replace(/\<span style\="color\: #D73811"\>/g, '');
         var re = new RegExp(base + '\\<sup\\>', 'g');
