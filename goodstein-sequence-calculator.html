@@ -5,6 +5,8 @@ terms = <input type='text' id='t' value='4'/> (minimum 2)<br/>
 <input type='button' id='ok' value='OK'/>
 <br/><br/>
 <div style='font-family: sans-serif;font-weight: bold; font-size: 4em; color: #D73811; background-color: #EFE2FB' id='outputdiv1'></div>
+<br/><br/>
+Programmed by: <a href='http://mtbink.com'>http://mtbink.com</a>
 <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
@@ -73,6 +75,7 @@ function goodstein_sequence(n_number, t_terms) {
     var eval_expression = function (t, base) {
         t = t.replace(/\<\/sup\>/g, ')');
         t = t.replace(/\<\/span\>/g, '');
+        t = t.replace(/&minus;/g, '-');
         t = t.replace(/\<span style\="color\: #0A46F6"\>/g, '');
         t = t.replace(/\<span style\="color\: #D73811"\>/g, '');
         var re = new RegExp(base + '\\<sup\\>', 'g');
@@ -83,7 +86,7 @@ function goodstein_sequence(n_number, t_terms) {
     var write_increase_expression = function (t, base) {
         var re = new RegExp(base, 'g');
         t = t.replace(re, '<span style="color: #0A46F6">' + (base + 1) + '</span>');
-        return t + '<span style="color: #0A46F6"> - 1</span>';
+        return t + '<span style="color: #0A46F6"> &minus; 1</span>';
     }
 
     var t = '';
