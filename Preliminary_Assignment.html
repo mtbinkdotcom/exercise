@@ -110,6 +110,7 @@
             <button id="sphere">SPHERE</button>
             <button id="helix">HELIX</button>
             <button id="grid">GRID</button>
+            <button id="pyramid">PYRAMID</button>
         </div>
 
         <script>
@@ -234,7 +235,7 @@
                 "Ts", "Tennessine", "(294)", 17, 7,
                 "Og", "Oganesson", "(294)", 18, 7
             ];
-            
+
 // ENTER: Overwrite with friends name.
 // ===================================
 function tarmizi_random(start, end) {
@@ -262,7 +263,7 @@ for (var i = 0, ii = table.length; i < ii; i++) {
     table[i]   = db_friend_genders[random_position];
     table[i+1] = db_friend_names[random_position];
     table[i+2] = db_friend_ages[random_position];
-    
+
     i = i + 4;
 }
 // LEAVE: Overwrite with friends name.
@@ -273,6 +274,12 @@ for (var i = 0, ii = table.length; i < ii; i++) {
 
             var objects = [];
             var targets = { table: [], sphere: [], helix: [], grid: [] };
+
+// ENTER: Adding pyramid.
+// ======================
+targets.pyramid = [];
+// LEAVE: Adding pyramid.
+// ======================
 
             init();
             animate();
@@ -400,6 +407,35 @@ if (gender == "M") {
                     targets.grid.push( object );
 
                 }
+                
+// ENTER: Algorithm for pyramid.
+// =============================
+var row = 1;
+var count_done = 0;
+for (var i = 0; i < objects.length; i++) {
+
+    var object = new THREE.Object3D();
+
+    object.position.y = -200 * (row - 1);
+    var x_off = -85 * (row - 1);
+
+    if (count_done < row) {
+        object.position.x = 150 * count_done + x_off;
+        count_done++;
+        if (count_done == row) {
+            row++;
+            count_done = 0;
+        }
+    } else if (count_done == row) {
+        row++;
+        count_done = 0;
+    }
+    object.position.z = 0;
+
+    targets.pyramid.push(object);
+}
+// LEAVE: Algorithm for pyramid.
+// =============================
 
                 //
 
@@ -443,9 +479,20 @@ if (gender == "M") {
                     transform( targets.grid, 2000 );
 
                 }, false );
+                
+// ENTER: Add pyramid event.
+// =========================
+var button = document.getElementById( 'pyramid' );
+button.addEventListener( 'click', function ( event ) {
+
+    transform( targets.pyramid, 2000 );
+
+}, false );
+// ENTER: Add pyramid event.
+// =========================
 
                 transform( targets.table, 2000 );
-
+                
                 //
 
                 window.addEventListener( 'resize', onWindowResize, false );
